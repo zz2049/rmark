@@ -1,0 +1,9 @@
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/schemas/
+src-tauri/icons/icon.png
+.DS_Store
+tests/fixtures/generated/
+coverage/
+*.log

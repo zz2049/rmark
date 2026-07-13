@@ -1,0 +1,42 @@
+{
+  "name": "rmark",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "fixtures": "node scripts/generate-fixtures.mjs",
+    "perf:baseline": "vitest run tests/performance",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@codemirror/commands": "latest",
+    "@codemirror/lang-markdown": "latest",
+    "@codemirror/language": "latest",
+    "@codemirror/state": "latest",
+    "@codemirror/view": "latest",
+    "@tauri-apps/api": "latest",
+    "codemirror": "latest",
+    "svelte": "latest"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "latest",
+    "@tauri-apps/cli": "latest",
+    "@testing-library/svelte": "latest",
+    "@types/node": "latest",
+    "jsdom": "latest",
+    "prettier": "latest",
+    "prettier-plugin-svelte": "latest",
+    "svelte-check": "latest",
+    "typescript": "5.9.3",
+    "vite": "latest",
+    "vitest": "latest"
+  }
+}
