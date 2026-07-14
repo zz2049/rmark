@@ -8,6 +8,7 @@ const enabled = import.meta.env.DEV || reportEnabled;
 const REPORT_ELEMENT_ID = 'rmark-performance-report';
 
 export interface PerformanceSnapshot {
+  readonly decorationBuildMs: readonly number[];
   readonly inputToFrameMs: readonly number[];
   readonly transactionCallbackMs: readonly number[];
   readonly startupMarks: Readonly<Record<string, number>>;
@@ -24,6 +25,7 @@ declare global {
 
 const inputToFrameMs: number[] = [];
 const transactionCallbackMs: number[] = [];
+const decorationBuildMs: number[] = [];
 const startupMarks: Record<string, number> = {};
 
 function reportSnapshot(): void {
@@ -51,6 +53,7 @@ export function markStartup(name: string): void {
 
 function snapshot(): PerformanceSnapshot {
   return {
+    decorationBuildMs: [...decorationBuildMs],
     inputToFrameMs: [...inputToFrameMs],
     transactionCallbackMs: [...transactionCallbackMs],
     startupMarks: { ...startupMarks },
@@ -58,8 +61,14 @@ function snapshot(): PerformanceSnapshot {
 }
 
 function reset(): void {
+  decorationBuildMs.length = 0;
   inputToFrameMs.length = 0;
   transactionCallbackMs.length = 0;
+}
+
+export function recordDecorationBuild(durationMs: number): void {
+  if (!enabled) return;
+  pushBounded(decorationBuildMs, durationMs);
 }
 
 if (enabled && typeof window !== 'undefined') {

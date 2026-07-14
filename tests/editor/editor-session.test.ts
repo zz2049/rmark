@@ -55,4 +55,50 @@ describe('editor session', () => {
 
     expect(view.hasFocus).toBe(false);
   });
+
+  it('reveals source markers on the active line without changing the document', () => {
+    const doc = '**bold** and [link](url)\n\nplain';
+    const { view } = mount(doc);
+    const plainPosition = doc.indexOf('plain');
+    view.dispatch({ selection: EditorSelection.cursor(plainPosition) });
+
+    expect(view.contentDOM.textContent).not.toContain('**');
+    expect(view.contentDOM.textContent).not.toContain('(url)');
+    expect(view.state.doc.toString()).toBe(doc);
+
+    view.dispatch({ selection: EditorSelection.cursor(3) });
+    expect(view.contentDOM.textContent).toContain('**bold**');
+    expect(view.contentDOM.textContent).toContain('[link](url)');
+    expect(view.state.doc.toString()).toBe(doc);
+  });
+
+  it('keeps raw Markdown through rapid edits, undo, and redo', () => {
+    const { view } = mount('**bold**');
+    for (let index = 0; index < 50; index += 1) {
+      view.dispatch({ changes: { from: view.state.doc.length, insert: String(index % 10) } });
+    }
+
+    const edited = view.state.doc.toString();
+    expect(edited.startsWith('**bold**')).toBe(true);
+    expect(undo(view)).toBe(true);
+    expect(redo(view)).toBe(true);
+    expect(view.state.doc.toString()).toBe(edited);
+  });
+
+  it('freezes marker rebuilding during composition and refreshes after it ends', async () => {
+    const doc = '**bold**\n\nplain';
+    const { view } = mount(doc);
+    const plainPosition = doc.indexOf('plain');
+    view.dispatch({ selection: EditorSelection.cursor(plainPosition) });
+    expect(view.contentDOM.textContent).not.toContain('**');
+
+    view.contentDOM.dispatchEvent(new CompositionEvent('compositionstart', { data: '' }));
+    view.dispatch({ selection: EditorSelection.cursor(3) });
+    expect(view.contentDOM.textContent).not.toContain('**');
+
+    view.contentDOM.dispatchEvent(new CompositionEvent('compositionend', { data: '' }));
+    await Promise.resolve();
+    expect(view.contentDOM.textContent).toContain('**bold**');
+    expect(view.state.doc.toString()).toBe(doc);
+  });
 });

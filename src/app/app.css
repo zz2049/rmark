@@ -87,6 +87,86 @@ input {
   background: #d8e6ee !important;
 }
 
+.editor-shell .cm-live-heading {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-weight: 700;
+  color: #26231f;
+}
+
+.editor-shell .cm-live-heading-1 {
+  font-size: 1.8em;
+}
+
+.editor-shell .cm-live-heading-2 {
+  font-size: 1.5em;
+}
+
+.editor-shell .cm-live-heading-3 {
+  font-size: 1.28em;
+}
+
+.editor-shell .cm-live-heading-4,
+.editor-shell .cm-live-heading-5,
+.editor-shell .cm-live-heading-6 {
+  font-size: 1.08em;
+}
+
+.editor-shell .cm-live-strong {
+  font-weight: 700;
+}
+
+.editor-shell .cm-live-emphasis {
+  font-style: italic;
+}
+
+.editor-shell .cm-live-strikethrough {
+  text-decoration: line-through;
+}
+
+.editor-shell .cm-live-inline-code {
+  border-radius: 4px;
+  padding: 0.08em 0.3em;
+  color: #9b442d;
+  background: #f0ece5;
+}
+
+.editor-shell .cm-live-link {
+  color: #326d8a;
+  text-decoration: underline;
+  text-decoration-color: #9bbccc;
+  text-underline-offset: 0.18em;
+}
+
+.editor-shell .cm-live-blockquote {
+  color: #777168;
+  font-style: italic;
+}
+
+.editor-shell .cm-live-quote-marker {
+  margin-right: 0.7em;
+  color: #c5bdb0;
+  font-style: normal;
+  user-select: none;
+}
+
+.editor-shell .cm-live-list-marker {
+  display: inline-block;
+  min-width: 1.4em;
+  color: #9a5b43;
+  font-weight: 650;
+  user-select: none;
+}
+
+.editor-shell .cm-live-list-marker-ordered {
+  min-width: 2em;
+}
+
 @media (max-width: 700px) {
   .editor-shell .cm-content {
     padding-inline: 24px;

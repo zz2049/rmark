@@ -6,6 +6,7 @@ import {
 } from '@codemirror/autocomplete';
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
 import { markdown } from '@codemirror/lang-markdown';
+import { Strikethrough } from '@lezer/markdown';
 import {
   bracketMatching,
   defaultHighlightStyle,
@@ -29,6 +30,7 @@ import {
   rectangularSelection,
 } from '@codemirror/view';
 import type { EditorSession } from './editor-session';
+import { livePreview } from './live-preview/live-preview';
 import { createPerformanceSampler } from './performance/performance-sampler';
 
 // Keep basicSetup's editing behavior, but use the browser's native selection and
@@ -65,11 +67,11 @@ const editorSetup = [
 
 const initialDocument = `# 欢迎使用 RMark
 
-这是阶段 0 的 Markdown 编辑器骨架。
+这是 RMark 的 Markdown 实时预览编辑器。
 
 - 文档由 CodeMirror EditorState 持有
 - 输入路径不经过 Rust IPC
-- 当前阶段仅显示 Markdown 源码
+- 点击当前行可显示 Markdown 源码标记
 `;
 
 function benchmarkDocument(): string | undefined {
@@ -94,7 +96,13 @@ export function createEditor(
   const performanceSampler = createPerformanceSampler();
   const state = EditorState.create({
     doc,
-    extensions: [editorSetup, markdown(), EditorView.lineWrapping, performanceSampler.extension],
+    extensions: [
+      editorSetup,
+      markdown({ extensions: [Strikethrough] }),
+      livePreview,
+      EditorView.lineWrapping,
+      performanceSampler.extension,
+    ],
   });
   const view = new EditorView({ state, parent });
 

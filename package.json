@@ -25,6 +25,7 @@
     "@codemirror/search": "latest",
     "@codemirror/state": "latest",
     "@codemirror/view": "latest",
+    "@lezer/markdown": "latest",
     "@tauri-apps/api": "latest",
     "svelte": "latest"
   },
