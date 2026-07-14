@@ -1,10 +1,67 @@
-import { basicSetup } from 'codemirror';
+import {
+  autocompletion,
+  closeBrackets,
+  closeBracketsKeymap,
+  completionKeymap,
+} from '@codemirror/autocomplete';
+import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
 import { markdown } from '@codemirror/lang-markdown';
+import {
+  bracketMatching,
+  defaultHighlightStyle,
+  foldGutter,
+  foldKeymap,
+  indentOnInput,
+  syntaxHighlighting,
+} from '@codemirror/language';
+import { lintKeymap } from '@codemirror/lint';
+import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import { EditorState } from '@codemirror/state';
-import { EditorView, keymap } from '@codemirror/view';
-import { defaultKeymap, historyKeymap, indentWithTab } from '@codemirror/commands';
+import {
+  crosshairCursor,
+  dropCursor,
+  EditorView,
+  highlightActiveLine,
+  highlightActiveLineGutter,
+  highlightSpecialChars,
+  keymap,
+  lineNumbers,
+  rectangularSelection,
+} from '@codemirror/view';
 import type { EditorSession } from './editor-session';
 import { createPerformanceSampler } from './performance/performance-sampler';
+
+// Keep basicSetup's editing behavior, but use the browser's native selection and
+// caret. CodeMirror's drawSelection extension adds another blink animation that
+// keeps WKWebView rendering while the document is otherwise idle.
+const editorSetup = [
+  lineNumbers(),
+  highlightActiveLineGutter(),
+  highlightSpecialChars(),
+  history(),
+  foldGutter(),
+  dropCursor(),
+  EditorState.allowMultipleSelections.of(true),
+  indentOnInput(),
+  syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+  bracketMatching(),
+  closeBrackets(),
+  autocompletion(),
+  rectangularSelection(),
+  crosshairCursor(),
+  highlightActiveLine(),
+  highlightSelectionMatches(),
+  keymap.of([
+    indentWithTab,
+    ...closeBracketsKeymap,
+    ...defaultKeymap,
+    ...searchKeymap,
+    ...historyKeymap,
+    ...foldKeymap,
+    ...completionKeymap,
+    ...lintKeymap,
+  ]),
+];
 
 const initialDocument = `# 欢迎使用 RMark
 
@@ -37,17 +94,9 @@ export function createEditor(
   const performanceSampler = createPerformanceSampler();
   const state = EditorState.create({
     doc,
-    extensions: [
-      basicSetup,
-      markdown(),
-      keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
-      EditorView.lineWrapping,
-      performanceSampler.extension,
-    ],
+    extensions: [editorSetup, markdown(), EditorView.lineWrapping, performanceSampler.extension],
   });
   const view = new EditorView({ state, parent });
-
-  view.focus();
 
   return {
     view,

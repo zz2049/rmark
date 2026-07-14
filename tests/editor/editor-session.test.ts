@@ -49,4 +49,10 @@ describe('editor session', () => {
     expect(view.state.doc.lines).toBe(3);
     expect(view.dom.querySelector('.cm-content')).not.toBeNull();
   });
+
+  it('waits for explicit user interaction before taking focus', () => {
+    const { view } = mount();
+
+    expect(view.hasFocus).toBe(false);
+  });
 });

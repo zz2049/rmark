@@ -17,13 +17,15 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "latest",
     "@codemirror/commands": "latest",
     "@codemirror/lang-markdown": "latest",
     "@codemirror/language": "latest",
+    "@codemirror/lint": "latest",
+    "@codemirror/search": "latest",
     "@codemirror/state": "latest",
     "@codemirror/view": "latest",
     "@tauri-apps/api": "latest",
-    "codemirror": "latest",
     "svelte": "latest"
   },
   "devDependencies": {
